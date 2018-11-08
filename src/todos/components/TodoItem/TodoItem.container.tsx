@@ -1,0 +1,47 @@
+import * as React from 'react';
+import { TodoItem as TodoItemType } from '../types';
+import * as actions from '../../actions';
+
+interface PropTypes {
+    item: TodoItemType;
+    todoId: number,
+    onChange: () => Promise<void>;
+}
+
+function TodoItem(TodoItemComponent) {
+    class TodoItemClass extends React.Component<PropTypes, null> {
+
+        constructor(props: PropTypes) {
+            super(props);
+            this.onChange = this.onChange.bind(this);
+            this.onDelete = this.onDelete.bind(this);
+        }
+    
+        async onChange(data: object) {
+            const { todoId, item, onChange } = this.props;
+            await actions.updateTodoItem(todoId, item.id, data);
+            await onChange();
+        }
+    
+        async onDelete() {
+            const { todoId, onChange, item } = this.props;
+            await actions.deleteTodoItem(todoId, item.id);
+            await onChange();
+        }
+    
+        render() {
+            const { item } = this.props;
+            return (
+                <TodoItemComponent
+                    item={item}
+                    onChange={this.onChange}
+                    onDelete={this.onDelete}
+                />
+            )
+        }
+    }
+
+    return TodoItemClass;
+}
+
+export default TodoItem;
