@@ -1,4 +1,4 @@
-const SERVER_URL = 'http://localhost:5000'
+const SERVER_URL = 'http://192.168.1.13:5000'
 
 export function fetchGraphQL(query) {
     return fetch(`${SERVER_URL}/graphql?`, {
@@ -10,5 +10,6 @@ export function fetchGraphQL(query) {
     .then((data) => {
         console.log(data);
         return data;
-    });
+    })
+    .catch((error) => { console.error(error)});
 }
